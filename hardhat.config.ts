@@ -1,12 +1,14 @@
 import * as dotenv from "dotenv";
 
-import { HardhatUserConfig, task } from "hardhat/config";
+import { HardhatUserConfig } from "hardhat/types";
+import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "hardhat-deploy";
+import "@nomiclabs/hardhat-ethers";
 
 dotenv.config();
 
@@ -15,6 +17,7 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
 const RINKEBY_URL = process.env.ALCHEMY_RINKEBY_URL;
 const MUMBAI_URL = process.env.ALCHEMY_MUMBAI_URL;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "";
+const POLYGON_API_KEY = process.env.POLYGONSCAN_API_KEY || "";
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "";
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -31,6 +34,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 // Go to https://hardhat.org/config/ to learn more
 
 const config: HardhatUserConfig = {
+  defaultNetwork: "hardhat",
   solidity: {
     compilers: [{ version: "0.8.7" }, { version: "0.6.6" }],
   },
@@ -49,16 +53,17 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY],
       chainId: 4,
     },
-    mumbai: {
+    polygonMumbai: {
       url: MUMBAI_URL,
       accounts: [PRIVATE_KEY],
       chainId: 80001,
     },
   },
   etherscan: {
-    apiKey: ETHERSCAN_API_KEY,
-    // Can also set a key for each network
-    // apiKey: { network: key},
+    apiKey: {
+      rinkeby: ETHERSCAN_API_KEY,
+      polygonMumbai: POLYGON_API_KEY,
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
@@ -69,6 +74,11 @@ const config: HardhatUserConfig = {
   },
   mocha: {
     timeout: 200000, // Timeout at 200 seconds
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
   },
 };
 

@@ -6,10 +6,11 @@ interface networksType {
 interface networkConfig {
   networkName: string;
   contracts: {
-    tokens?: {};
+    tokens: { [tokenName: string]: string };
     priceFeeds?: {};
   };
   config: {
+    isLocalDev: boolean;
     shouldVerify: boolean;
     [prop: string]: any;
   };
@@ -19,8 +20,11 @@ export const networks: networksType = {
   defaultNetworkConfigId: 31337,
   31337: {
     networkName: "hardhat",
-    contracts: {},
+    contracts: {
+      tokens: {},
+    },
     config: {
+      isLocalDev: true,
       shouldVerify: true,
     },
   },
@@ -42,16 +46,35 @@ export const networks: networksType = {
       },
     },
     config: {
+      isLocalDev: false,
+      shouldVerify: true,
+    },
+  },
+  80001: {
+    networkName: "mumbai",
+    contracts: {
+      tokens: {},
+    },
+    config: {
+      isLocalDev: false,
+      shouldVerify: true,
+    },
+  },
+  137: {
+    networkName: "polygon",
+    contracts: {
+      tokens: {},
+    },
+    config: {
+      isLocalDev: false,
       shouldVerify: true,
     },
   },
 };
 
-export const environments = {
-  development: ["hardhat", "localhost"],
-};
-
 export const VERIFICATION_BLOCK_CONFIRMATIONS = 6;
 
-export const DECIMALS = "18";
-export const INITIAL_PRICE = "200000000000000000000";
+export const mocks = {
+  decimals: "18",
+  initial_price: "200000000000000000000",
+};

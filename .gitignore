@@ -8,3 +8,5 @@ typechain
 typechain-types
 cache
 artifacts
+deployments
+gas-report.txt
