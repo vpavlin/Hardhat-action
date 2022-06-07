@@ -1,7 +1,6 @@
-import { network } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { networks } from "../utils/utils-hardhat-config";
+import { isCurrentChainLocal } from "../utils/scripts/isCurrentChainLocal";
 
 const deployMocks: DeployFunction = async function ({
   getNamedAccounts,
@@ -10,9 +9,9 @@ const deployMocks: DeployFunction = async function ({
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const chainId = network.config.chainId as number;
+  const { isLocal, chainId } = isCurrentChainLocal();
 
-  if (networks[chainId].config.isLocalDev) {
+  if (isLocal) {
     log("Local Network - Deploying Mocks...");
     await deploy("TestToken", {
       from: deployer,

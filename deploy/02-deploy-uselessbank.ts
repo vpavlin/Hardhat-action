@@ -1,11 +1,11 @@
-import { network } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { isCurrentChainLocal } from "../utils/scripts/isCurrentChainLocal";
+import verify from "../utils/scripts/verify";
 import {
   networks,
   VERIFICATION_BLOCK_CONFIRMATIONS,
 } from "../utils/utils-hardhat-config";
-import verify from "../utils/scripts/verify";
 
 const deployUselessBank: DeployFunction = async function ({
   getNamedAccounts,
@@ -14,36 +14,36 @@ const deployUselessBank: DeployFunction = async function ({
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const chainId = network.config.chainId as number;
+  const { isLocal, chainId } = isCurrentChainLocal();
 
-  const isLocalDev = networks[chainId].config.isLocalDev;
-
+  // Get the depended contracts
   let tokenAddress;
-  if (isLocalDev) {
+  if (isLocal) {
     const mockToken = await deployments.get("TestToken");
     tokenAddress = mockToken.address;
   } else {
     tokenAddress = networks[chainId].contracts.tokens.token;
+
+    tokenAddress = tokenAddress
+      ? tokenAddress
+      : (await deployments.get("Token")).address;
   }
 
-  const args: any[] = [
-    //tokenAddress
-  ];
+  const args: any[] = [tokenAddress];
 
   const bank = await deploy("UselessBank", {
     from: deployer,
     args: args,
     log: true,
-    waitConfirmations: VERIFICATION_BLOCK_CONFIRMATIONS || 1,
+    waitConfirmations: isLocal ? 1 : VERIFICATION_BLOCK_CONFIRMATIONS,
   });
 
-  if (!isLocalDev) {
+  if (!isLocal) {
     await verify(bank.address, args);
   }
-
-  log(tokenAddress);
 };
 
 export default deployUselessBank;
 
-deployUselessBank.tags = ["all", "uselessbank"];
+deployUselessBank.tags = ["all", "UselessBank"];
+deployUselessBank.dependencies = ["Token"];

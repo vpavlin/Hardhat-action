@@ -16,7 +16,8 @@ contract UselessBank is IUselessBank, Base {
     /// @notice Stores whether a certain token is allowed to be used.
     mapping(IERC20 => bool) private s_allowedTokens;
 
-    constructor() {
+    constructor(IERC20 _token) checkNonZeroAddress(address(_token)) {
+        s_allowedTokens[_token] = true;
         i_owner = msg.sender;
     }
 
@@ -35,28 +36,33 @@ contract UselessBank is IUselessBank, Base {
         checkAllowedToken(_token)
     {
         s_balanceOf[msg.sender][_token] += _amount;
-        _token.transferFrom(msg.sender, address(this), _amount);
 
         emit Deposited(msg.sender, _token, _amount);
+
+        _token.transferFrom(msg.sender, address(this), _amount);
     }
 
     function withdraw(IERC20 _token, uint256 _amount)
         external
         override
+        checkNonZeroAddress(address(_token))
+        checkNonZeroValue(_amount)
         checkAllowedToken(_token)
     {
         if (s_balanceOf[msg.sender][_token] < _amount)
             revert NotEnoughBalance();
 
         s_balanceOf[msg.sender][_token] -= _amount;
-        _token.transfer(msg.sender, _amount);
 
         emit Withdrawn(msg.sender, _token, _amount);
+
+        _token.transfer(msg.sender, _amount);
     }
 
     function authorizeToken(IERC20 _token, bool _allow)
         external
         override
+        checkNonZeroAddress(address(_token))
         checkExpectedCaller(msg.sender, i_owner)
     {
         s_allowedTokens[_token] = _allow;
@@ -76,5 +82,9 @@ contract UselessBank is IUselessBank, Base {
 
     function getOwner() external view returns (address owner) {
         owner = i_owner;
+    }
+
+    function isAuthorized(IERC20 _token) external view returns (bool) {
+        return s_allowedTokens[_token];
     }
 }

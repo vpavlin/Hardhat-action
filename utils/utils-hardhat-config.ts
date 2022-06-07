@@ -10,7 +10,7 @@ interface networkConfig {
     priceFeeds?: {};
   };
   config: {
-    isLocalDev: boolean;
+    isLocalChain: boolean;
     shouldVerify: boolean;
     [prop: string]: any;
   };
@@ -21,10 +21,12 @@ export const networks: networksType = {
   31337: {
     networkName: "hardhat",
     contracts: {
-      tokens: {},
+      tokens: {
+        fau: "0xFab46E002BbF0b4509813474841E0716E6730136",
+      },
     },
     config: {
-      isLocalDev: true,
+      isLocalChain: true,
       shouldVerify: true,
     },
   },
@@ -46,7 +48,7 @@ export const networks: networksType = {
       },
     },
     config: {
-      isLocalDev: false,
+      isLocalChain: false,
       shouldVerify: true,
     },
   },
@@ -56,7 +58,7 @@ export const networks: networksType = {
       tokens: {},
     },
     config: {
-      isLocalDev: false,
+      isLocalChain: false,
       shouldVerify: true,
     },
   },
@@ -66,7 +68,7 @@ export const networks: networksType = {
       tokens: {},
     },
     config: {
-      isLocalDev: false,
+      isLocalChain: false,
       shouldVerify: true,
     },
   },

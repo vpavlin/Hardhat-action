@@ -1,27 +1,25 @@
-import { Fixture, MockContract } from "ethereum-waffle";
 import { Wallet } from "@ethersproject/wallet";
-import { UselessBank } from "../../typechain-types";
+import { TestToken, UselessBank } from "../../typechain-types";
 
 declare module "mocha" {
   export interface Context {
-    loadFixture: <T>(fixture: Fixture<T>) => Promise<T>;
-    signers: Signers;
+    // loadFixture: <T>(fixture: Fixture<T>) => Promise<T>;
     contracts: Contracts;
-    mocks: Mocks;
+    namedSigners: Signers;
+    unnamedSigners: Wallet[];
   }
 }
 
 export interface Signers {
   deployer: Wallet;
-  signerA: Wallet;
-  signerB: Wallet;
-  signerC: Wallet;
+  alice: Wallet;
+  bob: Wallet;
+  charlie: Wallet;
+  dave: Wallet;
 }
 
+// Expand this interface with all the contracts needed
 export interface Contracts {
   bank: UselessBank;
-}
-
-export interface Mocks {
-  token: MockContract;
+  token: TestToken;
 }
