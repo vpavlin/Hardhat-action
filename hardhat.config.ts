@@ -71,6 +71,7 @@ const config: HardhatUserConfig = {
     outputFile: "gas-report.txt",
     noColors: true,
     coinmarketcap: COINMARKETCAP_API_KEY,
+    token: process.env.REPORT_TOKEN,
   },
   mocha: {
     timeout: 200000, // Timeout at 200 seconds
