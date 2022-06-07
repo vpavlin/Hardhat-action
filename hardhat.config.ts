@@ -69,7 +69,7 @@ const config: HardhatUserConfig = {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: process.env.REPORT_CURRENCY,
     outputFile: "gas-report.txt",
-    // noColors: true,
+    noColors: true,
     coinmarketcap: COINMARKETCAP_API_KEY,
   },
   mocha: {
