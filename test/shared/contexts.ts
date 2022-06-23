@@ -5,8 +5,8 @@ import { deployments, ethers, waffle } from "hardhat";
  * It initializes all the attributes that can be needed globally in the underlying tests.
  *
  */
-export function baseContext(description: string, hooks: () => void) {
-  describe(description, async function () {
+export function baseContext(name: string, hooks: () => void) {
+  describe(name, async function () {
     before("Set up signers", async function () {
       const signers = waffle.provider.getWallets();
 
