@@ -3,7 +3,6 @@ import { TestToken, UselessBank } from "../../typechain-types";
 
 declare module "mocha" {
   export interface Context {
-    // loadFixture: <T>(fixture: Fixture<T>) => Promise<T>;
     contracts: Contracts;
     namedSigners: Signers;
     unnamedSigners: Wallet[];
@@ -11,7 +10,10 @@ declare module "mocha" {
 }
 
 export interface Signers {
+  // Semantic Users
   deployer: Wallet;
+
+  // Other Users
   alice: Wallet;
   bob: Wallet;
   charlie: Wallet;

@@ -28,7 +28,6 @@ export function baseContext(name: string, hooks: () => void) {
         bank: await ethers.getContract("UselessBank"),
         token: await ethers.getContract("TestToken"),
       };
-      // this.loadFixture = waffle.createFixtureLoader(signers);
     });
 
     hooks();
