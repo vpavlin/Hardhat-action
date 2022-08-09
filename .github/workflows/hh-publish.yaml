@@ -24,11 +24,11 @@ jobs:
 
       - name: Run `hardhat compile`
         run: |
-          hardhat compile
+          yarn hardhat compile
 
       - name: Run `hardhat deploy`
         run: |
-          echo '::set-output name=DEPLOY_OUTPUT::$(hardhat deploy --network ${{ secrets.NETWORK_NAME }})\n'
+          echo '::set-output name=DEPLOY_OUTPUT::$(yarn hardhat deploy --network ${{ secrets.NETWORK_NAME }})\n'
         id: deploy
 
       - name: Comment the contract address to the PR
