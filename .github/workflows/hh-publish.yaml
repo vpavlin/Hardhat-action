@@ -30,7 +30,7 @@ jobs:
 
       - name: Run `hardhat deploy`
         run: |
-          echo '::set-output name=DEPLOY_OUTPUT::$(yarn hardhat deploy --network ${{ secrets.NETWORK_NAME }})\n'
+          echo "::set-output name=DEPLOY_OUTPUT::$(yarn hardhat deploy --network ${{ secrets.NETWORK_NAME }})\n"
         id: deploy
         env:
           PRIVATE_KEY: '${{ secrets.NETWORK_PRIVATE_KEY }}'
