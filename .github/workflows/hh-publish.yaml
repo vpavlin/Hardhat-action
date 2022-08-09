@@ -1,0 +1,37 @@
+---
+# hardhat compile && deploy to a network
+
+name: Hardhat compile and deploy
+
+on:
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  compile-n-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+
+      - name: Run `hardhat compile`
+        run: |
+          hardhat compile
+
+      - name: Run `hardhat deploy`
+        run: |
+          echo '::set-output name=DEPLOY_OUTPUT::$(hardhat deploy --network ${{ secrets.NETWORK_NAME }})\n'
+        id: deploy
+
+      - name: Comment the contract address to the PR
+        uses: actions/github-script@v5
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Hardhat deploy output: ' + steps.deploy.outputs.DEPLOY_OUTPUT
+            })
