@@ -44,5 +44,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Hardhat deploy output: ' + steps.deploy.outputs.DEPLOY_OUTPUT
+              body: 'Hardhat deploy output: ${{ steps.deploy.outputs.DEPLOY_OUTPUT }}'
             })
