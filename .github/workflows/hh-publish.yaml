@@ -30,6 +30,8 @@ jobs:
         run: |
           echo '::set-output name=DEPLOY_OUTPUT::$(yarn hardhat deploy --network ${{ secrets.NETWORK_NAME }})\n'
         id: deploy
+        env:
+          PRIVATE_KEY: '${{ secrets.NETWORK_PRIVATE_KEY }}'
 
       - name: Comment the contract address to the PR
         uses: actions/github-script@v5
