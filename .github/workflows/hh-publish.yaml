@@ -30,13 +30,21 @@ jobs:
 
       - name: Run `hardhat deploy`
         run: |
-          echo "::set-output name=DEPLOY_OUTPUT::$(yarn hardhat deploy --network ${{ secrets.NETWORK_NAME }})\n"
+          deploy=$(yarn hardhat deploy --network ${{ secrets.NETWORK_NAME }})
+          deploy="${deploy//'%'/'%25'}"
+          deploy="${deploy//$'\n'/'%0A'}"
+          deploy="${deploy//$'\r'/'%0D'}" 
+          echo $deploy
+          echo "::set-output name=DEPLOY_OUTPUT::$deploy\n"
         id: deploy
         env:
           PRIVATE_KEY: '${{ secrets.NETWORK_PRIVATE_KEY }}'
+          POLYGONSCAN_API_KEY: '${{ secrets.POLYGONSCAN_API_KEY }}'
 
       - name: Comment the contract address to the PR
         uses: actions/github-script@v5
+        env: 
+          MULTILINE_VALUE: "${{ steps.deploy.outputs.DEPLOY_OUTPUT }}"
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -44,5 +52,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Hardhat deploy output: ${{ steps.deploy.outputs.DEPLOY_OUTPUT }}'
+              body: process.env.MULTILINE_VALUE
             })
