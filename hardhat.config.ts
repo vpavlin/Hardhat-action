@@ -48,20 +48,14 @@ const config: HardhatUserConfig = {
       url: "http://127.0.0.1:8545/",
       chainId: 31337,
     },
-    rinkeby: {
-      url: RINKEBY_URL,
-      accounts: [PRIVATE_KEY],
-      chainId: 4,
-    },
     polygonMumbai: {
-      url: MUMBAI_URL,
+      url: "https://matic-testnet-archive-rpc.bwarelabs.com",
       accounts: [PRIVATE_KEY],
       chainId: 80001,
     },
   },
   etherscan: {
     apiKey: {
-      rinkeby: ETHERSCAN_API_KEY,
       polygonMumbai: POLYGON_API_KEY,
     },
   },

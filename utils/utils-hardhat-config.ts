@@ -74,7 +74,7 @@ export const networks: networksType = {
   },
 };
 
-export const VERIFICATION_BLOCK_CONFIRMATIONS = 6;
+export const VERIFICATION_BLOCK_CONFIRMATIONS = 2;
 
 export const mocks = {
   decimals: "18",
